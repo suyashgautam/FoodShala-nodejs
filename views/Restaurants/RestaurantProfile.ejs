@@ -1,0 +1,44 @@
+<%- include('../partials/restaurantHeader.ejs', {title: "Profile"}) %>
+<div class="col-sm-6 mt-5">
+    <form class="mx-5" method="POST" enctype="multipart/form-data" action="/rprofile">
+        <div class="form-group">
+            <img src=<%= user.image %> alt="" height="150" width="150">
+        </div>
+        <div class="form-group">
+            <% if(message == 'Success') { %>
+                <div class="form-group success-alert">
+                    <div class="alert alert-success" role="alert">
+                    User Profile updated !
+                    </div>
+                </div>
+                <% } if(message == 'Failure') { %>
+                <div class="form-group failure-alert">
+                    <div class="alert alert-danger" role="alert">
+                    Some failure happened !
+                    </div>
+                </div>
+            <% } %>
+        </div>
+        <div class="form-group">
+            <label for="inputEmail">Email</label>
+            <input type="email" class="form-control" id="inputEmail" name="remail" value=<%= user.email %> readonly>
+        </div>
+        <div class="form-group">
+            <strong><label for="inputName">Name</label></strong>
+            <input type="text" class="form-control" id="inputName" name="rname" value=<%= user.name %> >
+        </div>
+
+        <div class="form-group">
+            <strong><label for="inputAddress">Address</label></strong>
+            <input type="text" class="form-control" id="inputAddress" name="raddress" value=<%= user.address %> >
+        </div>
+        <div class="form-group">
+            <i class="fas fa-key"></i><label for="img" class="pl-2 font-weight-bold">Image
+            </label><input type="file" class="form-control" name="rimage">
+        </div>
+        <button type="submit" class="btn btn-danger" name="nameupdate">Update</button>
+    </form>
+</div>
+</div>
+</div>
+<%- include('../partials/restaurantFooter.ejs') %>

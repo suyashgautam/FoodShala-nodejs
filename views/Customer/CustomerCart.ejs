@@ -1,0 +1,102 @@
+<%- include('../partials/customerHeader.ejs', {title: "Cart"}) %>
+<div class="container text-center border rounded bg-light my-5">
+    <h1>MY CART</h1>
+
+
+    <div class="col-lg-9">
+        <table class="table">
+            <thead class="text-center">
+                <tr>
+                    <th scope="col">Serial No.</th>
+                    <th scope="col">Item Name</th>
+                    <th scope="col">Item Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+            </tbody>
+        </table>
+
+        <div class="col-lg-3">
+            <div class="border bg-light rounded p-4">
+                <h4>Grand Total:</h4>
+                <h5 class="text-right" id="gtotal"></h5>
+                <br>
+                <form action="/orders" method="POST">
+                    <button name="purchase" class="btn btn-primary btn-block">Make Purchase</button>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<script>
+    const updateQty = (id, email, d_cost) => {
+        var e = document.querySelector('#quantity' + id);
+        const data = {
+            qty: e.value,
+            d_id: id,
+            c_email: email
+        }
+        fetch('/cart', {method: 'PATCH', headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },body: JSON.stringify(data)}).then(response => response.json()).then(response => {
+            var e = document.querySelector('#quantity' + id);
+            var itotal = document.querySelector('#d' + id);
+            var gtotal = document.querySelector('#gtotal');
+            gtotal.innerHTML = (parseInt(gtotal.innerHTML)) - (parseInt(itotal.innerHTML)) + (d_cost * e.value);
+            itotal.innerHTML = (d_cost * e.value);
+        });
+    }
+
+    const cartDishes = () => {
+        const tbody = document.querySelector('tbody');
+        const tcost = document.querySelector('#gtotal');
+        fetch('/cartdishes').then(response => response.json()).then(response => {
+            let tb = ``;
+            let cost = 0;
+            response.forEach((element, index) => {
+                cost = cost + (element.cart_quantity * element.d_cost);
+                const dishes = `<tr>
+                        <th scope='row'>${index + 1}</th>
+                        <td>${element.d_name}</td>
+                        <td>${element.d_cost}<input type='hidden' class='iprice'
+                                value=${element.d_cost}></td>
+                        <td>
+                            <select name="quantity" id="quantity${element.d_id}" onchange = "updateQty('${element.d_id}', '${element.c_email}', '${element.d_cost}')">
+                                <option value="1" ${element.cart_quantity === 1 ? 'selected' : ''}>1</option>
+                                <option value="2" ${element.cart_quantity === 2 ? 'selected' : ''}>2</option>
+                                <option value="3" ${element.cart_quantity === 3 ? 'selected' : ''}>3</option>
+                                <option value="4" ${element.cart_quantity === 4 ? 'selected' : ''}>4</option>
+                                <option value="5" ${element.cart_quantity === 5 ? 'selected' : ''}>5</option>
+                                <option value="6" ${element.cart_quantity === 6 ? 'selected' : ''}>6</option>
+                                <option value="7" ${element.cart_quantity === 7 ? 'selected' : ''}>7</option>
+                                <option value="8" ${element.cart_quantity === 8 ? 'selected' : ''}>8</option>
+                            </select>
+                            </td>
+                        <td class='itotal' id = 'd${element.d_id}'>${element.cart_quantity * element.d_cost}</td>
+                        <td>
+                            <button name='Remove_Item' class='btn btn-sm btn-outline-danger' onclick = "deleteDish('${element.d_id}')">REMOVE</button>
+                        </td>
+                    </tr>`
+                tb = tb + dishes; 
+            });
+            tbody.innerHTML = tb;
+            tcost.innerHTML = cost;
+        });
+    }
+    window.addEventListener('load', cartDishes)
+    const tcost = document.querySelector('#gtotal');
+    const deleteDish = (d_id) => {
+        fetch('/cart?dish='+d_id, {method: 'DELETE', headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        }}).then(response => {
+            cartDishes();
+        })
+    }
+</script>
+
+<%- include('../partials/customerFooter.ejs') %>
