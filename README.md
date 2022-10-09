@@ -1,4 +1,4 @@
-# FoodShala-nodejs
+# Alimento
 
 ### This is a Web app which allows users to order food from their favourite restaurant. The application contains 2 types of users: Restaurants and Customers
 
