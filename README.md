@@ -1,4 +1,4 @@
-# Alimento
+# FoodShala
 
 ### This is a Web app which allows users to order food from their favourite restaurant. The application contains 2 types of users: Restaurants and Customers
 
@@ -15,3 +15,6 @@ http://www.foodshala.social/
 
 ## Demo Link
 https://www.youtube.com/watch?v=1o4-QBlhZHQ&t=3s
+
+## PHP Version
+https://github.com/suyashgautam/FoodShala
